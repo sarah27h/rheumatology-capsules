@@ -8,7 +8,7 @@
 
 ## About the Project
 
-This repo perform as boilerplate for simple front-end websites using Sass and Gulp 4.
+This repo perform as boilerplate for simple front-end projects using Sass and Gulp 4.
 
 ## Installation
 
