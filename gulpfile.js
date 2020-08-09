@@ -92,6 +92,7 @@ function scssTask() {
       .pipe(gulpif(!production, sourcemaps.init()))
       .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError)) // compile SCSS to CSS
       .pipe(postcss([autoprefixer()]))
+      .pipe(gulpif(production, rename({ extname: '.min.css' })))
       .pipe(gulpif(!production, sourcemaps.write('./')))
       .pipe(dest(distFiles.distCSSPath)) // put final CSS in dist folder
       // stream changes to all browsers sync all browser
@@ -123,21 +124,6 @@ function jsTask() {
   );
 }
 
-function jsDistTask() {
-  return src([srcFiles.jsPath])
-    .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(
-      babel({
-        presets: ['@babel/preset-env']
-      })
-    )
-    .pipe(concat('all.js'))
-    .pipe(rename({ extname: '.min.js' }))
-    .pipe(uglify())
-    .pipe(sourcemaps.write('./'))
-    .pipe(dest(distFiles.distJSPath));
-}
-
 // optimize images
 function images() {
   return src([srcFiles.imagesPath])
@@ -159,6 +145,19 @@ function cleanDistForBuild() {
   return del([distFiles.distPath, '!dist/images', '!dist/css', '!dist/js']);
 }
 
+// delete min files for development
+function deleteMinFiles() {
+  return del([`${distFiles.distCSSPath}/*.min.css`, `${distFiles.distJSPath}/*.min.js`]);
+}
+
+// dynamically change href and src in index.html in production
+function templateTask() {
+  return src([srcFiles.indexPath])
+    .pipe(replace(/mainStyle.css/g, 'mainStyle.min.css'))
+    .pipe(replace(/all.js/g, 'all.min.js'))
+    .pipe(dest(distFiles.distPath));
+}
+
 // Cache busting solves the browser caching issue
 // by using a unique file version identifier to
 // tell the browser that a new version of the file is available.
@@ -173,13 +172,6 @@ function cacheBustTask() {
     )
     .pipe(dest('.')); // put in the same place
 }
-
-// function cacheBustTask() {
-//   const cbString = new Date().getTime();
-//   return src('index.html')
-//     .pipe(replace(/cb=\d+/g, 'cb=' + cbString))
-//     .pipe(dest('.')); // put in the same place
-// }
 
 // start server
 // using done
@@ -222,6 +214,7 @@ function watchTask() {
 // you should add your tasks to be run first time
 // then any change in them will be managed by watchTask
 exports.default = series(
+  deleteMinFiles,
   parallel(scssTask, jsTask, images, initIndexHtml, copyImagesTask, copyfontawesomeWebfontsTask),
   cacheBustTask,
   parallel(serveTask, watchTask)
@@ -230,5 +223,13 @@ exports.default = series(
 // to produce a production version
 exports.build = series(
   cleanDistForBuild,
-  parallel(scssTask, jsTask, images, copyHTMLTask, copyImagesTask, copyfontawesomeWebfontsTask)
+  parallel(
+    scssTask,
+    jsTask,
+    images,
+    templateTask,
+    copyHTMLTask,
+    copyImagesTask,
+    copyfontawesomeWebfontsTask
+  )
 );
