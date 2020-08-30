@@ -33,7 +33,7 @@ const srcFiles = {
   scssPagesPath: 'src/scss/pagesStyles/**/*.scss',
   scssPath: 'src/scss/**/*.scss',
   jsPath: 'src/js/**/*.js',
-  htmlPath: './**/*.html',
+  htmlPath: 'src/pages/**/*.html',
   imagesPath: 'src/images/*',
   indexPath: './index.html',
   webFontsPath: './node_modules/@fortawesome/fontawesome-free/webfonts/*'
@@ -41,6 +41,7 @@ const srcFiles = {
 
 const distFiles = {
   distPath: 'dist/',
+  distPagesPath: 'dist/pages',
   distImagesPath: 'dist/images',
   distCSSPath: 'dist/css',
   distJSPath: 'dist/js',
@@ -78,7 +79,7 @@ function initIndexHtml() {
 }
 
 function copyHTMLTask() {
-  return src([srcFiles.htmlPath]).pipe(dest(distFiles.distPath));
+  return src([srcFiles.htmlPath]).pipe(dest(distFiles.distPagesPath));
 }
 
 function copyImagesTask() {
@@ -203,6 +204,8 @@ function watchTask() {
   watch(srcFiles.jsPath, series(jsTask, cacheBustTask, reload));
   //watch changes in root index.html
   watch(srcFiles.indexPath, series(initIndexHtml, reload));
+  // watch for changes in html pages
+  watch(srcFiles.htmlPath, series(copyHTMLTask, reload));
   //watch changes for dist/index.html
   watch('./dist/index.html', reload);
   watch(srcFiles.imagesPath, series(images, reload));
@@ -215,7 +218,15 @@ function watchTask() {
 // then any change in them will be managed by watchTask
 exports.default = series(
   deleteMinFiles,
-  parallel(scssTask, jsTask, images, initIndexHtml, copyImagesTask, copyfontawesomeWebfontsTask),
+  parallel(
+    scssTask,
+    jsTask,
+    images,
+    initIndexHtml,
+    copyHTMLTask,
+    copyImagesTask,
+    copyfontawesomeWebfontsTask
+  ),
   cacheBustTask,
   parallel(serveTask, watchTask)
 );
