@@ -229,7 +229,6 @@ exports.default = series(
   parallel(
     scssTask,
     jsTask,
-    images,
     initIndexHtml,
     copyHTMLTask,
     copyImagesTask,
