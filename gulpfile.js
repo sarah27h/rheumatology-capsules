@@ -34,9 +34,9 @@ const srcFiles = {
   scssPath: 'src/scss/**/*.scss',
   jsPath: 'src/js/**/*.js',
   htmlPath: 'src/pages/**/*.html',
-  imagesPath: 'src/images/*',
+  imagesPath: 'src/images/**/*',
   indexPath: './index.html',
-  webFontsPath: './node_modules/@fortawesome/fontawesome-free/webfonts/*'
+  webFontsPath: './node_modules/@fortawesome/fontawesome-free/webfonts/*',
 };
 
 const distFiles = {
@@ -45,7 +45,7 @@ const distFiles = {
   distImagesPath: 'dist/images',
   distCSSPath: 'dist/css',
   distJSPath: 'dist/js',
-  distWebfonts: 'dist/webfonts'
+  distWebfonts: 'dist/webfonts',
 };
 
 // flag to Gulp to run different tasks for prod, dev
@@ -113,7 +113,7 @@ function jsTask() {
         gulpif(
           production,
           babel({
-            presets: ['@babel/preset-env']
+            presets: ['@babel/preset-env'],
           })
         )
       )
@@ -134,8 +134,8 @@ function images() {
         imagemin.mozjpeg({ quality: 75, progressive: true }),
         imagemin.optipng({ optimizationLevel: 5 }),
         imagemin.svgo({
-          plugins: [imageminPngquant(), { removeViewBox: true }, { cleanupIDs: false }]
-        })
+          plugins: [imageminPngquant(), { removeViewBox: true }, { cleanupIDs: false }],
+        }),
       ])
     )
     .pipe(dest(distFiles.distImagesPath));
@@ -176,7 +176,7 @@ function cacheBustTask() {
   return src('index.html')
     .pipe(
       cachebust({
-        type: 'timestamp'
+        type: 'timestamp',
       })
     )
     .pipe(dest('.')); // put in the same place
@@ -192,8 +192,8 @@ function serveTask() {
   browserSync.init({
     // setup server
     server: {
-      baseDir: './dist/'
-    }
+      baseDir: './dist/',
+    },
   });
 
   // done();
@@ -216,7 +216,7 @@ function watchTask() {
   watch(srcFiles.htmlPath, series(copyHTMLTask, reload));
   //watch changes for dist/index.html
   watch('./dist/index.html', reload);
-  watch(srcFiles.imagesPath, series(images, reload));
+  watch(srcFiles.imagesPath, series(copyImagesTask, reload));
   // when making a change in html, js we need browser to refresh
   // watch(srcFiles.jsPath).on('change', browserSync.reload);
   // watch(srcFiles.htmlPath).on('change', browserSync.reload);
