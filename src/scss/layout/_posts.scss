@@ -23,6 +23,7 @@
     grid-gap: 2rem;
 
     &__img {
+      justify-self: center;
       max-width: 100%;
     }
 
@@ -36,7 +37,6 @@
     }
 
     &__btn {
-      text-decoration: none;
       justify-self: center;
     }
   }
