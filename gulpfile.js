@@ -35,6 +35,7 @@ const srcFiles = {
   jsPath: 'src/js/**/*.js',
   htmlPath: 'src/pages/**/*.html',
   imagesPath: 'src/images/**/*',
+  videosPath: 'src/videos/**/*',
   indexPath: './index.html',
   webFontsPath: './node_modules/@fortawesome/fontawesome-free/webfonts/*',
 };
@@ -43,6 +44,7 @@ const distFiles = {
   distPath: 'dist/',
   distPagesPath: 'dist/pages',
   distImagesPath: 'dist/images',
+  distVideosPath: 'dist/videos',
   distCSSPath: 'dist/css',
   distJSPath: 'dist/js',
   distWebfonts: 'dist/webfonts',
@@ -84,6 +86,10 @@ function copyHTMLTask() {
 
 function copyImagesTask() {
   return src([srcFiles.imagesPath]).pipe(dest(distFiles.distImagesPath));
+}
+
+function copyVideosTask() {
+  return src([srcFiles.videosPath]).pipe(dest(distFiles.distVideosPath));
 }
 
 // Sass task: compiles the Scss files into CSS
@@ -216,7 +222,10 @@ function watchTask() {
   watch(srcFiles.htmlPath, series(copyHTMLTask, reload));
   //watch changes for dist/index.html
   watch('./dist/index.html', reload);
-  watch(srcFiles.imagesPath, series(copyImagesTask, reload));
+  watch(
+    [srcFiles.imagesPath, srcFiles.videosPath],
+    series([copyImagesTask, copyVideosTask], reload)
+  );
   // when making a change in html, js we need browser to refresh
   // watch(srcFiles.jsPath).on('change', browserSync.reload);
   // watch(srcFiles.htmlPath).on('change', browserSync.reload);
@@ -232,6 +241,7 @@ exports.default = series(
     initIndexHtml,
     copyHTMLTask,
     copyImagesTask,
+    copyVideosTask,
     copyfontawesomeWebfontsTask
   ),
   cacheBustTask,
@@ -249,6 +259,7 @@ exports.build = series(
     templatePagesTask,
     copyHTMLTask,
     copyImagesTask,
+    copyVideosTask,
     copyfontawesomeWebfontsTask
   )
 );
