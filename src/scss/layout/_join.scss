@@ -1,0 +1,25 @@
+.join {
+  grid-column: full-start/full-end;
+
+  display: grid;
+  grid-gap: 2rem;
+  justify-items: center;
+  align-items: center;
+
+  padding: 6rem;
+  background: $primary-color;
+  text-align: center;
+
+  &__heading {
+    font-size: 2.5rem;
+    color: $white;
+  }
+
+  &__description {
+    font-size: 3rem;
+    color: $white;
+  }
+
+  &__btn {
+  }
+}
