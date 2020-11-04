@@ -1,0 +1,70 @@
+.footer {
+  grid-column: full-start/full-end;
+
+  display: grid;
+  grid-template-columns: 2rem min-content repeat(2, 1fr) 2rem;
+  grid-gap: 1rem;
+
+  background: #e8e8e8;
+  padding: 8rem 0;
+
+  &__logo {
+    grid-column: 2/3;
+  }
+
+  &__nav {
+    grid-column: 3/4;
+    align-self: center;
+
+    &-items {
+      list-style: none;
+      display: flex;
+      //   flex-direction: column;
+      font-size: 1.7rem;
+    }
+
+    &-links {
+      margin-left: 4.5rem;
+    }
+
+    &-link:link,
+    &-link:visited {
+      text-decoration: none;
+      color: $black;
+      font-family: $secondary-font;
+      transition: all -2s;
+    }
+
+    &-link:hover {
+      color: $secondary-color;
+    }
+  }
+
+  &__social {
+    grid-column: 4/5;
+    justify-self: flex-end;
+    align-self: center;
+
+    &-items {
+      list-style: none;
+      display: flex;
+      font-size: 4rem;
+    }
+
+    &-links {
+      margin-left: 6rem;
+    }
+
+    &-link:link,
+    &-link:visited {
+      text-decoration: none;
+      color: $black;
+      font-family: $secondary-font;
+      transition: all -2s;
+    }
+
+    &-link:hover {
+      color: $secondary-color;
+    }
+  }
+}
