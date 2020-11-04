@@ -9,7 +9,7 @@
 
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: 3rem repeat(2, minmax(min-content, 1fr)) 3rem;
+  grid-template-columns: 2rem repeat(2, minmax(min-content, 1fr)) 2rem;
   grid-template-rows: min-content 1fr minmax(6rem, min-content) 1fr;
 
   &__navbar {
