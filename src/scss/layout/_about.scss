@@ -1,0 +1,22 @@
+.about {
+  grid-column: center-start / center-end;
+
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-rows: min-content 1fr;
+
+  text-align: center;
+
+  &__heading {
+    font-size: 3rem;
+    justify-self: center;
+  }
+
+  &__video {
+    justify-self: center;
+
+    video {
+      width: 100%;
+    }
+  }
+}
