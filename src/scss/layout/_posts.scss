@@ -4,6 +4,8 @@
   display: grid;
   grid-gap: 2rem;
 
+  padding: 6rem;
+
   &__heading {
     justify-self: center;
     font-size: 5rem;
@@ -38,6 +40,18 @@
 
     &__btn {
       justify-self: center;
+      align-self: center;
     }
   }
+
+  &__btn {
+    justify-self: center;
+    align-self: center;
+  }
+}
+
+.last-posts {
+  grid-column: full-start/full-end;
+
+  background: #eee;
 }

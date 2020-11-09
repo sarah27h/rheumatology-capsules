@@ -8,6 +8,7 @@
 
 html {
   font-size: 62.5%;
+  scroll-behavior: smooth !important;
 
   @include respond(tab-land) {
     font-size: 56.25%;
@@ -27,13 +28,21 @@ body {
   font-family: $secondary-font;
 }
 
+.show {
+  display: grid;
+}
+
+.hide {
+  display: none !important;
+}
+
 .grid {
   display: grid;
   grid-template-columns:
     [full-start] minmax(6rem, 1fr) [center-start] repeat(2, minmax(min-content, 60rem))
     [center-end] minmax(6rem, 1fr) [full-end];
   grid-template-rows: 100vh min-content;
-  row-gap: 6rem;
+  // row-gap: 6rem;
 
   ::selection {
     color: $white;
