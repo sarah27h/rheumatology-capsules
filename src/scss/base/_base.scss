@@ -42,7 +42,13 @@ body {
     [full-start] minmax(6rem, 1fr) [center-start] repeat(2, minmax(min-content, 60rem))
     [center-end] minmax(6rem, 1fr) [full-end];
   grid-template-rows: 100vh min-content;
-  // row-gap: 6rem;
+
+  @include respond(phone) {
+    grid-template-columns: [full-start] minmax(6rem, 1fr) [center-start] repeat(2, 1fr) [center-end] minmax(
+        6rem,
+        1fr
+      ) [full-end];
+  }
 
   ::selection {
     color: $white;

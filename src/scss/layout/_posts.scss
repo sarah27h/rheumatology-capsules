@@ -6,6 +6,10 @@
 
   padding: 6rem;
 
+  @include respond(phone) {
+    grid-column: full-start/full-end;
+  }
+
   &__heading {
     justify-self: center;
     font-size: 5rem;
@@ -32,6 +36,7 @@
     &__heading {
       justify-self: center;
       font-size: 2rem;
+      text-align: center;
     }
 
     &__description {

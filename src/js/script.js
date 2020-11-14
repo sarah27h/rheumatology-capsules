@@ -1,4 +1,4 @@
-const postsBtn = document.querySelector('.posts__btn');
+// const postsBtn = document.querySelector('.posts__btn');
 const posts = document.getElementsByClassName('post');
 console.log(posts);
 let hideNum = 0;
@@ -15,7 +15,7 @@ const showMore = () => {
   }
 };
 
-postsBtn.addEventListener('click', showMore);
+// postsBtn.addEventListener('click', showMore);
 
 // Array.from(posts).forEach((post) => {
 //   if (post.classList.contains('hide')) {

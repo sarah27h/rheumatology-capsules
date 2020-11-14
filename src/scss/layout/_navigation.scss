@@ -1,19 +1,64 @@
 .header {
   &__logo {
-    justify-self: center;
-    align-self: center;
+    justify-self: flex-start;
+    align-self: flex-start;
   }
+
   &__nav {
     justify-self: flex-end;
-    align-self: center;
+    align-self: flex-start;
+    transition: height 0.25s ease-in;
+
+    &--shrink {
+      height: 45px;
+    }
+
+    &--expand {
+      height: 100vh;
+      opacity: 0.98;
+      z-index: -10000;
+      transition: height 0.25s ease-in;
+    }
+
+    &-hamburger {
+      font-size: 0;
+      @include respond(tab-land) {
+        border: none;
+        background: none;
+        font-size: 3rem;
+        cursor: pointer;
+        padding: 12px;
+      }
+    }
 
     &-items {
       display: flex;
       list-style: none;
+
+      @include respond(tab-land) {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        left: 0;
+        height: inherit;
+
+        &.open {
+          display: flex;
+          background: #1e6cbf;
+          width: 100%;
+          z-index: -10000;
+        }
+      }
     }
 
     &-links {
       margin-right: 5rem;
+      @include respond(tab-land) {
+        margin-top: 25px;
+      }
     }
 
     &-link:link,
@@ -23,6 +68,10 @@
       color: $black;
       font-family: $secondary-font;
       transition: all -2s;
+      @include respond(tab-land) {
+        font-size: 3rem;
+        color: $black;
+      }
     }
 
     &-link:hover {
@@ -31,6 +80,9 @@
 
     .active {
       color: $secondary-color;
+      @include respond(tab-land) {
+        color: $white;
+      }
     }
   }
 }
