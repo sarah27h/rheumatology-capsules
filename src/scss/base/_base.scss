@@ -30,10 +30,30 @@ body {
 
 .show {
   display: grid;
+  display: block;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
 }
 
 .hide {
   display: none !important;
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .grid {
@@ -44,10 +64,9 @@ body {
   grid-template-rows: 100vh min-content;
 
   @include respond(phone) {
-    grid-template-columns: [full-start] minmax(6rem, 1fr) [center-start] repeat(2, 1fr) [center-end] minmax(
-        6rem,
-        1fr
-      ) [full-end];
+    grid-template-columns:
+      [full-start] minmax(6rem, 1fr) [center-start] repeat(2, 1fr) [center-end] minmax(6rem, 1fr)
+      [full-end];
   }
 
   ::selection {
