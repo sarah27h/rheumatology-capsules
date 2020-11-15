@@ -29,10 +29,14 @@
     grid-column: 3/4;
     align-self: center;
 
+    @include respond(tab-port) {
+      grid-column: 4/5;
+      justify-self: flex-end;
+    }
+
     @include respond(phone) {
       width: 100%;
       grid-column: 2/3;
-      align-self: center;
       justify-self: center;
     }
 
@@ -74,11 +78,15 @@
     justify-self: flex-end;
     align-self: center;
 
+    @include respond(tab-port) {
+      grid-column: 4/5;
+    }
+
     @include respond(phone) {
       grid-column: 2/3;
       width: 100%;
-      align-self: center;
       justify-self: center;
+      align-self: center;
     }
 
     &-items {
