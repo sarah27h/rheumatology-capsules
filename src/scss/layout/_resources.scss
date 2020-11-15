@@ -1,7 +1,7 @@
 .resources {
   grid-column: full-start / full-end;
   display: grid;
-  grid-gap: 2rem;
+  gap: 2rem;
 
   padding: 6rem;
   background: #eee;
@@ -48,14 +48,14 @@
   // resources container
   &__container {
     display: grid;
-    grid-gap: 4rem;
+    gap: 4rem;
     grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
 
     // resource container
     .resource {
       display: grid;
       grid-template-rows: min-content;
-      grid-gap: 2rem;
+      gap: 2rem;
 
       background-color: $white;
       padding: 2rem;

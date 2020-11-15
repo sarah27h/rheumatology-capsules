@@ -2,7 +2,7 @@
   grid-column: full-start/full-end;
 
   display: grid;
-  grid-gap: 2rem;
+  gap: 2rem;
   justify-items: center;
   align-items: center;
 
@@ -18,8 +18,5 @@
   &__description {
     font-size: 3rem;
     color: $white;
-  }
-
-  &__btn {
   }
 }
