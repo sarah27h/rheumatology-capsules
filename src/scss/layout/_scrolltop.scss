@@ -1,0 +1,19 @@
+.scroll-top-btn {
+  position: fixed;
+  right: 10px;
+  bottom: 100px;
+  font-size: 6rem;
+  color: $dark-gray;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+
+.v-show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.v-hide {
+  visibility: hidden;
+  opacity: 0;
+}

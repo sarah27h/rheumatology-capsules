@@ -27,6 +27,9 @@ const showLess = () => {
     morePostsBtn.classList.remove('hide');
     lessPostsBtn.classList.add('hide');
   }
+  document.querySelector('.posts__container').scrollIntoView({
+    behavior: 'smooth',
+  });
 };
 
 morePostsBtn.addEventListener('click', showMore);
