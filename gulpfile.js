@@ -38,6 +38,7 @@ const srcFiles = {
   videosPath: 'src/videos/**/*',
   indexPath: './index.html',
   webFontsPath: './node_modules/@fortawesome/fontawesome-free/webfonts/*',
+  faviconPath: './favicon.ico',
 };
 
 const distFiles = {
@@ -81,11 +82,15 @@ function initIndexHtml() {
 }
 
 function copyHTMLTask() {
-  return src([srcFiles.htmlPath]).pipe(dest(distFiles.distPagesPath));
+  return src([srcFiles.htmlPath, srcFiles.faviconPath]).pipe(dest(distFiles.distPath));
 }
 
 function copyImagesTask() {
   return src([srcFiles.imagesPath]).pipe(dest(distFiles.distImagesPath));
+}
+
+function copyFavicon() {
+  return src([srcFiles.faviconPath]).pipe(dest(distFiles.distPath));
 }
 
 function copyVideosTask() {
@@ -242,6 +247,7 @@ exports.default = series(
     copyHTMLTask,
     copyImagesTask,
     copyVideosTask,
+    copyFavicon,
     copyfontawesomeWebfontsTask
   ),
   cacheBustTask,
@@ -260,6 +266,7 @@ exports.build = series(
     copyHTMLTask,
     copyImagesTask,
     copyVideosTask,
+    copyFavicon,
     copyfontawesomeWebfontsTask
   )
 );
