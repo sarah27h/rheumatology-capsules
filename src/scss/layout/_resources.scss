@@ -6,6 +6,10 @@
   padding: 6rem;
   background: #eee;
 
+  @include respond(phone) {
+    justify-self: center;
+  }
+
   &__main-heading {
     justify-self: center;
     font-size: 5rem;
