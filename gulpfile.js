@@ -210,6 +210,17 @@ function serveTask() {
   // done();
 }
 
+// publish our static site to Surge
+const surge = require('gulp-surge');
+
+function deploy(done) {
+  return surge({
+    project: './dist/', // Path to your static build directory
+    domain: 'rheumatology_capsules.surge.sh', // Your domain or Surge subdomain
+  });
+  done();
+}
+
 function reload(done) {
   browserSync.reload();
   done();
@@ -268,5 +279,6 @@ exports.build = series(
     copyVideosTask,
     copyFavicon,
     copyfontawesomeWebfontsTask
-  )
+  ),
+  deploy
 );
