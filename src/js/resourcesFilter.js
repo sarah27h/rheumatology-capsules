@@ -104,13 +104,19 @@ const displayResourceCategory = (category, categoryName) => {
       class: 'resource',
       'data-resource-filter': categoryName,
     });
+    const imgSurroundLink = document.createElement('a');
+    setAttributes(imgSurroundLink, { class: 'resource__img', href: resource.link });
     const resourceImg = document.createElement('img');
     setAttributes(resourceImg, { class: 'resource__img', src: resource.src, alt: resource.alt });
-    resourceContainer.append(resourceImg);
+    imgSurroundLink.append(resourceImg);
+    resourceContainer.append(imgSurroundLink);
 
     const resourceHeading = document.createElement('h3');
     setAttributes(resourceHeading, { class: 'resource__heading heading-2' });
-    resourceHeading.textContent = resource.type_name;
+    const headingSurroundLink = document.createElement('a');
+    setAttributes(headingSurroundLink, { href: resource.link });
+    headingSurroundLink.textContent = resource.type_name;
+    resourceHeading.append(headingSurroundLink);
     resourceContainer.append(resourceHeading);
 
     const resourceLink = document.createElement('a');
