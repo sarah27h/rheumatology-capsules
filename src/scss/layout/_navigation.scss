@@ -21,8 +21,10 @@
     }
 
     &-hamburger {
-      font-size: 0;
+      display: none;
+
       @include respond(tab-land) {
+        display: inline-block;
         border: none;
         background: none;
         font-size: 3rem;

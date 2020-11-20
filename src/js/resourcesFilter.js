@@ -105,7 +105,7 @@ const displayResourceCategory = (category, categoryName) => {
       'data-resource-filter': categoryName,
     });
     const imgSurroundLink = document.createElement('a');
-    setAttributes(imgSurroundLink, { class: 'resource__img', href: resource.link });
+    setAttributes(imgSurroundLink, { class: 'resource__img', href: resource.link, tabindex: '-1' });
     const resourceImg = document.createElement('img');
     setAttributes(resourceImg, { class: 'resource__img', src: resource.src, alt: resource.alt });
     imgSurroundLink.append(resourceImg);
@@ -114,7 +114,7 @@ const displayResourceCategory = (category, categoryName) => {
     const resourceHeading = document.createElement('h3');
     setAttributes(resourceHeading, { class: 'resource__heading heading-2' });
     const headingSurroundLink = document.createElement('a');
-    setAttributes(headingSurroundLink, { href: resource.link });
+    setAttributes(headingSurroundLink, { href: resource.link, tabindex: '-1' });
     headingSurroundLink.textContent = resource.type_name;
     resourceHeading.append(headingSurroundLink);
     resourceContainer.append(resourceHeading);
@@ -124,8 +124,9 @@ const displayResourceCategory = (category, categoryName) => {
       class: 'resource__btn btn btn-main',
       href: resource.link,
       target: '_blank',
+      'aria-label': `Visit the ${resource.type_name} website`,
     });
-    resourceLink.textContent = `Visit`;
+    resourceLink.textContent = `Visit Website`;
     resourceContainer.append(resourceLink);
 
     fragment.append(resourceContainer);
