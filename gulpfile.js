@@ -28,6 +28,28 @@ const imagemin = require('gulp-imagemin');
 const imageminPngquant = require('imagemin-pngquant');
 const fileExists = require('file-exists');
 
+// serve our zipped index file for local server
+const gzipStatic = require('connect-gzip-static');
+
+// compress html
+const gzip = require('gulp-gzip');
+const htmlmin = require('gulp-htmlmin');
+
+// flag to Gulp to run different tasks for prod, dev
+const argv = require('yargs').argv;
+// to check conditions
+const gulpif = require('gulp-if');
+
+// create production parameter to Gulp Task from command line
+// run by using `gulp build --production`
+const production = argv.production;
+
+// for cachebust
+const cachebust = require('gulp-cache-bust');
+
+// publish our static site to Surge
+const surge = require('gulp-surge');
+
 const srcFiles = {
   mainScssPath: 'src/scss/**/mainStyle.scss',
   scssPagesPath: 'src/scss/pagesStyles/**/*.scss',
@@ -51,15 +73,6 @@ const distFiles = {
   distWebfonts: 'dist/webfonts',
 };
 
-// flag to Gulp to run different tasks for prod, dev
-const argv = require('yargs').argv;
-// to check conditions
-const gulpif = require('gulp-if');
-
-// create production parameter to Gulp Task from command line
-// run by using `gulp build --production`
-const production = argv.production;
-
 // check fontawesome webfonts exist then make a copy in dist
 const fontawesomeWebfont =
   './node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.eot';
@@ -74,15 +87,24 @@ async function copyfontawesomeWebfontsTask() {
   );
 }
 
-// for cachebust
-const cachebust = require('gulp-cache-bust');
-
+// copy index file in dist folder
+// replace css, js files with .min.css, .min.js extension files for production
 function initIndexHtml() {
-  return src([srcFiles.indexPath]).pipe(dest(distFiles.distPath));
+  return src([srcFiles.indexPath])
+    .pipe(gulpif(production, replace(/mainStyle.css/g, 'mainStyle.min.css')))
+    .pipe(gulpif(production, replace(/all.js/g, 'all.min.js')))
+    .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+    .pipe(dest(distFiles.distPath));
 }
 
+// copy html files in dist folder
+// replace css, js files with .min.css, .min.js extension files for production
 function copyHTMLTask() {
-  return src([srcFiles.htmlPath, srcFiles.faviconPath]).pipe(dest(distFiles.distPath));
+  return src([srcFiles.htmlPath])
+    .pipe(gulpif(production, replace(/mainStyle.css/g, 'mainStyle.min.css')))
+    .pipe(gulpif(production, replace(/all.js/g, 'all.min.js')))
+    .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+    .pipe(dest(distFiles.distPagesPath));
 }
 
 function copyImagesTask() {
@@ -152,6 +174,28 @@ function images() {
     .pipe(dest(distFiles.distImagesPath));
 }
 
+// compress index file
+// replace css, js files with .min.css, .min.js extension files for production
+function compressIndex() {
+  return src([srcFiles.indexPath])
+    .pipe(gulpif(production, replace(/mainStyle.css/g, 'mainStyle.min.css')))
+    .pipe(gulpif(production, replace(/all.js/g, 'all.min.js')))
+    .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+    .pipe(gzip())
+    .pipe(dest(distFiles.distPath));
+}
+
+// compress html pages
+// replace css, js files with .min.css, .min.js extension files for production
+function compressHTMLTask() {
+  return src([srcFiles.htmlPath])
+    .pipe(gulpif(production, replace(/mainStyle.css/g, 'mainStyle.min.css')))
+    .pipe(gulpif(production, replace(/all.js/g, 'all.min.js')))
+    .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+    .pipe(gzip())
+    .pipe(dest(distFiles.distPagesPath));
+}
+
 // delete dist files before running build
 function cleanDistForBuild() {
   return del([distFiles.distPath, '!dist/images', '!dist/css', '!dist/js']);
@@ -205,18 +249,25 @@ function serveTask() {
     server: {
       baseDir: './dist/',
     },
+    // middleware is too late in the stack when added via the options for .html files
+    // as serve-static ends the request prematurely thinking that the index file doesn't exist.
+    // override boolean will cause this middleware to be applied to the FRONT of the stack
+    middleware: [
+      {
+        route: '', // empty 'route' will apply this to all paths
+        handle: gzipStatic('./dist/'), // the callable
+        override: true,
+      },
+    ],
   });
 
   // done();
 }
 
-// publish our static site to Surge
-const surge = require('gulp-surge');
-
 function deploy(done) {
   return surge({
     project: './dist/', // Path to your static build directory
-    domain: 'rheumatology_capsules.surge.sh', // Your domain or Surge subdomain
+    domain: 'rhcapsules.surge.sh', // Your domain or Surge subdomain
   });
   done();
 }
@@ -255,7 +306,9 @@ exports.default = series(
     scssTask,
     jsTask,
     initIndexHtml,
+    compressIndex,
     copyHTMLTask,
+    compressHTMLTask,
     copyImagesTask,
     copyVideosTask,
     copyFavicon,
@@ -272,9 +325,10 @@ exports.build = series(
     scssTask,
     jsTask,
     images,
-    templateTask,
-    templatePagesTask,
+    initIndexHtml,
+    compressIndex,
     copyHTMLTask,
+    compressHTMLTask,
     copyImagesTask,
     copyVideosTask,
     copyFavicon,
