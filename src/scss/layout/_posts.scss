@@ -21,6 +21,8 @@
     display: grid;
     gap: 4rem;
     grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+
+    list-style: none;
   }
 
   .post {
