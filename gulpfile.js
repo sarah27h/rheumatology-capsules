@@ -267,7 +267,7 @@ function serveTask() {
 function deploy(done) {
   return surge({
     project: './dist/', // Path to your static build directory
-    domain: 'rhcapsules.surge.sh', // Your domain or Surge subdomain
+    domain: 'https:/rhcapsules.surge.sh', // Your domain or Surge subdomain
   });
   done();
 }
