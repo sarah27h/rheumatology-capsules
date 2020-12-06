@@ -50,6 +50,11 @@ const cachebust = require('gulp-cache-bust');
 // publish our static site to Surge
 const surge = require('gulp-surge');
 
+const processhtml = require('gulp-processhtml'),
+  opts = {
+    /* plugin options */
+  };
+
 const srcFiles = {
   mainScssPath: 'src/scss/**/mainStyle.scss',
   scssPagesPath: 'src/scss/pagesStyles/**/*.scss',
@@ -91,6 +96,7 @@ async function copyfontawesomeWebfontsTask() {
 // replace css, js files with .min.css, .min.js extension files for production
 function initIndexHtml() {
   return src([srcFiles.indexPath])
+    .pipe(processhtml())
     .pipe(gulpif(production, replace(/mainStyle.css/g, 'mainStyle.min.css')))
     .pipe(gulpif(production, replace(/all.js/g, 'all.min.js')))
     .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
@@ -178,6 +184,7 @@ function images() {
 // replace css, js files with .min.css, .min.js extension files for production
 function compressIndex() {
   return src([srcFiles.indexPath])
+    .pipe(processhtml())
     .pipe(gulpif(production, replace(/mainStyle.css/g, 'mainStyle.min.css')))
     .pipe(gulpif(production, replace(/all.js/g, 'all.min.js')))
     .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
@@ -252,13 +259,13 @@ function serveTask() {
     // middleware is too late in the stack when added via the options for .html files
     // as serve-static ends the request prematurely thinking that the index file doesn't exist.
     // override boolean will cause this middleware to be applied to the FRONT of the stack
-    middleware: [
-      {
-        route: '', // empty 'route' will apply this to all paths
-        handle: gzipStatic('./dist/'), // the callable
-        override: true,
-      },
-    ],
+    // middleware: [
+    //   {
+    //     route: '', // empty 'route' will apply this to all paths
+    //     handle: gzipStatic('./dist/'), // the callable
+    //     override: true,
+    //   },
+    // ],
   });
 
   // done();
@@ -267,7 +274,7 @@ function serveTask() {
 function deploy(done) {
   return surge({
     project: './dist/', // Path to your static build directory
-    domain: 'https:/rhcapsules.surge.sh', // Your domain or Surge subdomain
+    domain: 'https://rhcapsules.surge.sh', // Your domain or Surge subdomain
   });
   done();
 }
