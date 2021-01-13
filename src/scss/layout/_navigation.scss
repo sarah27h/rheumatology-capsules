@@ -1,20 +1,29 @@
 .header {
   &__logo {
     justify-self: flex-start;
-    align-self: flex-start;
+    align-self: center;
+
+    &--alignstart {
+      align-self: flex-start;
+    }
+
+    img {
+      justify-self: flex-start;
+      width: 150px;
+    }
   }
 
   &__nav {
     justify-self: flex-end;
-    align-self: flex-start;
+    align-self: center;
     transition: height 0.25s ease-in;
 
     &--shrink {
-      height: 45px;
+      height: auto;
     }
 
     &--expand {
-      height: 100vh;
+      height: 45vh;
       opacity: 0.98;
       z-index: -10000;
       transition: height 0.25s ease-in;
@@ -66,7 +75,7 @@
     &-link:link,
     &-link:visited {
       text-decoration: none;
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       color: $black;
       font-family: $secondary-font;
       transition: all -2s;
